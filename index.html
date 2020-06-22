@@ -1,10 +1,32 @@
 <!DOCTYPE html>
-
 <html>
-  <body>
-    <h1>
-      Hello World
-    </h1>
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  
+  <script>
+  	//console.log("DEBUG")
+  	
+    function getData() {
+        $.ajax({
+            url : 'data/references.bib',
+            type: 'GET',
+            success : handleData
+        })
+    }
     
+    function handleData(data) {
+        console.log(data);
+        document.getElementById('log').innerHTML = data;
+    }
+    
+    getData();
+    
+  </script>
+
+</head>
+  <body>
+    <div id="log">
+      space for publications
+    </div>
   </body>
 </html>
