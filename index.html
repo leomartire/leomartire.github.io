@@ -3,24 +3,82 @@
 <head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   
+  // From https://github.com/ORCID/bibtexParseJs.
+  <script src="scripts/bibtexParse.js"></script>
+  
   <script>
   	//console.log("DEBUG")
+    
+    function str_differ ( str1, str2 ) {
+      return (str1 < str2 ? -1 : +(str1 > str2));
+    }
   	
     function getData() {
         $.ajax({
-            url : 'data/references.bib',
+            url : 'https://leomartire.github.io/data/references.bib',
             type: 'GET',
             success : handleData
         })
     }
     
     function handleData(data) {
-        console.log(data);
-        document.getElementById('log').innerHTML = data;
+        //console.log(data);
+        const re_lcb = /{/gi;
+        const re_rcb = /}/gi;
+        const re_and = / and.*/gi;
+        const re_eacute = /{\\'{e}}/gi;
+        dataJSON = bibtexParse.toJSON(data)
+        console.log(dataJSON)
+        var num_entries = dataJSON.length
+        
+        // Prepare entries.
+        list = []
+        for(var i=0; i<num_entries; i++){
+        	var auth = dataJSON[i].entryTags['author']
+            auth = auth.replace(re_and, '')
+            auth = auth.replace(re_eacute, 'é')
+            authspl = auth.split(", ")
+            var firstAuth = false
+            if(str_differ(authspl[0], "Martire")){
+            	console.log('not first')
+            }else{
+            	console.log('first author')
+                firstAuth = true
+            }
+            auth = authspl[1]+" "+authspl[0]
+            if(firstAuth){
+              auth = "<b>"+auth+"</b>"
+            }
+            auth = auth + " <i>et al.</i>"
+            
+        	var tit = dataJSON[i].entryTags['title']
+            tit = tit.replace(re_lcb, '')
+            tit = tit.replace(re_rcb, '')
+            
+            var doi = dataJSON[i].entryTags['doi']
+            doi = "<a href='https://doi.org/"+doi+"'>DOI: "+doi+"</a>."
+            
+            var year = dataJSON[i].entryTags['year']
+            
+            var journal = dataJSON[i].entryTags['journal']
+            journal = "<i>"+journal+"</i>"
+            
+            var text = auth+" ("+year+"). "+tit+". "+journal+". "+doi
+            
+        	list.push(text)
+        }
+        
+        // TODO: sort entries.
+        
+        // Print to HTML.
+        document.getElementById('log').innerHTML = ''
+        for(var i=0; i<list.length; i++){
+          document.getElementById('log').innerHTML += list[i]
+        }
+        // data;
     }
     
     getData();
-    
   </script>
 
 </head>
