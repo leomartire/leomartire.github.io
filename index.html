@@ -35,36 +35,37 @@
         formatted_entries = []
         for(var i=0; i<num_entries; i++){
         	var auth = dataJSON[i].entryTags['author']
-            auth = auth.replace(re_and, '')
-            auth = auth.replace(re_eacute, 'é')
-            authspl = auth.split(", ")
-            var firstAuth = false
-            if(str_differ(authspl[0], "Martire")){
-            	console.log('not first')
-            }else{
-            	console.log('first author')
-                firstAuth = true
-            }
-            auth = authspl[1]+" "+authspl[0]
-            if(firstAuth){
-              auth = "<b>"+auth+"</b>"
-            }
-            auth = auth + " <i>et al.</i>"
-            
-        	var tit = dataJSON[i].entryTags['title']
-            tit = tit.replace(re_lcb, '')
-            tit = tit.replace(re_rcb, '')
-            
-            var doi = dataJSON[i].entryTags['doi']
-            doi = "<a href='https://doi.org/"+doi+"'>DOI: "+doi+"</a>."
-            
-            var year = dataJSON[i].entryTags['year']
-            
-            var journal = dataJSON[i].entryTags['journal']
-            journal = "<i>"+journal+"</i>"
-            
-            var text = auth+" ("+year+"). "+tit+". "+journal+". "+doi
-            
+          auth = auth.replace(re_and, '')
+          auth = auth.replace(re_eacute, 'é')
+          authspl = auth.split(", ")
+          var nth_auth = 0
+          if(str_differ(authspl[0], "Martire")){
+            console.log('not first')
+            nth_auth = 2 // TODO: find out place in author list
+          }else{
+            console.log('first author')
+            nth_auth = 1
+          }
+          auth = authspl[1]+" "+authspl[0]
+          if(nth_auth==1){
+            auth = "<b>"+auth+"</b>"
+          }
+          auth = auth + " <i>et al.</i>"
+          
+          var tit = dataJSON[i].entryTags['title']
+          tit = tit.replace(re_lcb, '')
+          tit = tit.replace(re_rcb, '')
+          
+          var doi = dataJSON[i].entryTags['doi']
+          doi = "<a href='https://doi.org/"+doi+"' target='_blank'>DOI: "+doi+"</a>."
+          
+          var year = dataJSON[i].entryTags['year']
+          
+          var journal = dataJSON[i].entryTags['journal']
+          journal = "<i>"+journal+"</i>"
+          
+          var text = auth+" ("+year+"). "+tit+". "+journal+". "+doi
+          
         	formatted_entries.push(text)
         }
         
@@ -85,16 +86,10 @@
 
 </head>
   <body>
-    <h1>
-      Léo
-    </h1>
+    <h1>Léo</h1>
     
-    <h2>
-      Publications
-    </h2>
-    <div id="publication_list">
-      
-    </div>
+    <h2>Publications</h2>
+    <div id="publication_list"></div>
     
   </body>
 </html>
