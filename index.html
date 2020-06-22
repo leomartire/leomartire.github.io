@@ -3,7 +3,7 @@
 <head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   
-  // From https://github.com/ORCID/bibtexParseJs.
+  <!-- BibTex parsing fetched from https://github.com/ORCID/bibtexParseJs. -->
   <script src="scripts/bibtexParse.js"></script>
   
   <script>
@@ -21,7 +21,7 @@
         })
     }
     
-    function handleData(data) {
+    function printPublications(data) {
         //console.log(data);
         const re_lcb = /{/gi;
         const re_rcb = /}/gi;
@@ -32,7 +32,7 @@
         var num_entries = dataJSON.length
         
         // Prepare entries.
-        list = []
+        formatted_entries = []
         for(var i=0; i<num_entries; i++){
         	var auth = dataJSON[i].entryTags['author']
             auth = auth.replace(re_and, '')
@@ -65,26 +65,36 @@
             
             var text = auth+" ("+year+"). "+tit+". "+journal+". "+doi
             
-        	list.push(text)
+        	formatted_entries.push(text)
         }
         
         // TODO: sort entries.
         
         // Print to HTML.
-        document.getElementById('log').innerHTML = ''
-        for(var i=0; i<list.length; i++){
-          document.getElementById('log').innerHTML += list[i]
+        var publication_list_id = 'publication_list'
+        document.getElementById(publication_list_id).innerHTML = ''
+        for(var i=0; i<formatted_entries.length; i++){
+          document.getElementById(publication_list_id).innerHTML += formatted_entries[i]
+          document.getElementById(publication_list_id).innerHTML += "<br/>"
         }
         // data;
     }
     
-    getData();
+    printPublications();
   </script>
 
 </head>
   <body>
-    <div id="log">
-      space for publications
+    <h1>
+      Léo
+    </h1>
+    
+    <h2>
+      Publications
+    </h2>
+    <div id="publication_list">
+      
     </div>
+    
   </body>
 </html>
