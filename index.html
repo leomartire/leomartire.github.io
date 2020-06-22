@@ -1,6 +1,17 @@
 <!DOCTYPE html>
+
+<?php
+require_once("inc/global.inc");
+?>
+
 <html>
-<body>
-<h1>Hello World</h1>
-</body>
+  <body>
+    <h1>
+      Hello World
+    </h1>
+    
+    <?php
+      rmvAc('é');
+    ?>
+  </body>
 </html>
