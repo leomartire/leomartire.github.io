@@ -46,6 +46,9 @@
             console.log('first author')
             nth_auth = 1
           }
+          if(nth_auth>1){
+            authspl[1] = authspl[1][0]+"."
+          }
           auth = authspl[1]+" "+authspl[0]
           if(nth_auth==1){
             auth = "<b>"+auth+"</b>"
