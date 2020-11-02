@@ -3,88 +3,10 @@
 <head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   
-  <!-- BibTex parsing fetched from https://github.com/ORCID/bibtexParseJs. -->
-  <script src="scripts/bibtexParse.js"></script>
-  
   <script>
-  	//console.log("DEBUG")
-    
-    function str_differ ( str1, str2 ) {
-      return (str1 < str2 ? -1 : +(str1 > str2));
-    }
-  	
-    function printPublications() {
-        $.ajax({
-            url : 'https://leomartire.github.io/data/references.bib',
-            type: 'GET',
-            success : handlePublications
-        })
-    }
-    
-    function handlePublications(data) {
-        //console.log(data);
-        const re_lcb = /{/gi;
-        const re_rcb = /}/gi;
-        const re_and = / and.*/gi;
-        const re_eacute = /{\\'{e}}/gi;
-        dataJSON = bibtexParse.toJSON(data)
-        console.log(dataJSON)
-        var num_entries = dataJSON.length
-        
-        // Prepare entries.
-        formatted_entries = []
-        for(var i=0; i<num_entries; i++){
-        	var auth = dataJSON[i].entryTags['author']
-          auth = auth.replace(re_and, '')
-          auth = auth.replace(re_eacute, 'é')
-          authspl = auth.split(", ")
-          var nth_auth = 0
-          if(str_differ(authspl[0], "Martire")){
-            console.log('not first')
-            nth_auth = 2 // TODO: find out place in author list
-          }else{
-            console.log('first author')
-            nth_auth = 1
-          }
-          if(nth_auth>1){
-            authspl[1] = authspl[1][0]+"."
-          }
-          auth = authspl[1]+" "+authspl[0]
-          if(nth_auth==1){
-            auth = "<b>"+auth+"</b>"
-          }
-          auth = auth + " <i>et al.</i>"
-          
-          var tit = dataJSON[i].entryTags['title']
-          tit = tit.replace(re_lcb, '')
-          tit = tit.replace(re_rcb, '')
-          
-          var doi = dataJSON[i].entryTags['doi']
-          doi = "<a href='https://doi.org/"+doi+"' target='_blank'>DOI: "+doi+"</a>."
-          
-          var year = dataJSON[i].entryTags['year']
-          
-          var journal = dataJSON[i].entryTags['journal']
-          journal = "<i>"+journal+"</i>"
-          
-          var text = auth+" ("+year+"). "+tit+". "+journal+". "+doi
-          
-        	formatted_entries.push(text)
-        }
-        
-        // TODO: sort entries.
-        
-        // Print to HTML.
-        var publication_list_id = 'publication_list'
-        document.getElementById(publication_list_id).innerHTML = ''
-        for(var i=0; i<formatted_entries.length; i++){
-          document.getElementById(publication_list_id).innerHTML += formatted_entries[i]
-          document.getElementById(publication_list_id).innerHTML += "<br/>"
-        }
-        // data;
-    }
-    
-    printPublications();
+    $(function(){
+      $("#publication_list").load('./processed/publications.htm');
+    });
   </script>
 
 </head>
