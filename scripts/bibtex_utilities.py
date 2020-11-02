@@ -128,33 +128,32 @@ def bibtex_fetch(filename):
   return([kept_articles_1st, kept_articles_2nd, kept_articles_nth, kept_presenta_1st, kept_presenta_2nd, kept_presenta_nth])
 
 def bibitem_print(item, n):
-  
+  # print authors
   nauth = len(item['author'])
-  
   if(n==1):
     string = '<b>'+item['author'][0][0]+'</b>'
     if(nauth==2):
       string = string+' and '+item['author'][1][0]
     else:
       string = string+' <i>et al.</i>'
-  
   elif(n==2):
     if(nauth==2):
       string = item['author'][0][0]+' and <b>'+item['author'][1][0]+'</b>'
     else:
       string = item['author'][0][0]+', <b>'+item['author'][1][0]+'</b>, <i>et al.</i>'
-  
   else:
-    #print(item)
-    string = item['author'][0][0]+' <b><i>et al.</i></b> ('+str(item['year'])+') - '+item['title']+' - '+item['journal']
+    string = item['author'][0][0]+' <b><i>et al.</i></b>'
   
+  # print year and title
   string = string+' ('+str(item['year'])+') - '+item['title']
   
+  # print type (journal or other)
   if(item['type']=='article'):
     string = string+' - <i>'+item['journal']+'</i>'
   elif(item['type']=='phdthesis'):
     string = string+' - PhD Thesis (<i>'+item['school']+'</i>)'
   
+  # finally add doi if available
   if('doi' in item):
     doi = item['doi']
     #print(doi)

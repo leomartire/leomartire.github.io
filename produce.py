@@ -16,7 +16,7 @@ def produce_publications(input_file, output_file):
   join_a2 = '\n<br>\n'.join(fmt_a2)
   join_an = '\n<br>\n'.join(fmt_an)
   
-  publications_str = join_a1+'\n<br><br>\n'+join_an+'\n<br><br>\n'+join_an
+  publications_str = join_a1+'\n<br><br>\n'+join_a2+'\n<br><br>\n'+join_an
   
   fid = open(output_file, 'w')
   fid.write(publications_str)
