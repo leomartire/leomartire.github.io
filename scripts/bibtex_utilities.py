@@ -127,22 +127,27 @@ def bibtex_fetch(filename):
         kept_presenta_nth.append(i)
   return([kept_articles_1st, kept_articles_2nd, kept_articles_nth, kept_presenta_1st, kept_presenta_2nd, kept_presenta_nth])
 
+def auth_fmt(item, i):
+  #return(item['author'][i][1]+' '+item['author'][i][0])
+  #return(item['author'][i][1][0]+'. '+item['author'][i][0])
+  return(' '.join([pp[0]+'.' for pp in item['author'][i][1].split(' ')]) + ' ' + item['author'][i][0])
+
 def bibitem_print(item, n):
   # print authors
   nauth = len(item['author'])
   if(n==1):
-    string = '<b>'+item['author'][0][0]+'</b>'
+    string = '<b>'+auth_fmt(item, 0)+'</b>'
     if(nauth==2):
-      string = string+' and '+item['author'][1][0]
-    else:
+      string = string+' and '+auth_fmt(item, 1)
+    elif(nauth>2):
       string = string+' <i>et al.</i>'
   elif(n==2):
     if(nauth==2):
-      string = item['author'][0][0]+' and <b>'+item['author'][1][0]+'</b>'
+      string = auth_fmt(item, 0)+' and <b>'+auth_fmt(item, 1)+'</b>'
     else:
-      string = item['author'][0][0]+', <b>'+item['author'][1][0]+'</b>, <i>et al.</i>'
+      string = auth_fmt(item, 0)+', <b>'+auth_fmt(item, 1)+'</b>, <i>et al.</i>'
   else:
-    string = item['author'][0][0]+' <b><i>et al.</i></b>'
+    string = auth_fmt(item, 0)+' <b><i>et al.</i></b>'
   
   # print year and title
   string = string+' ('+str(item['year'])+') - '+item['title']
