@@ -52,7 +52,7 @@ def bibtex_dictionnarise(items):
         print(splitted_field); stop
       else:
         curkey = splitted_field[0]
-        curval = splitted_field[1][:-1]
+        curval = latex2html(splitted_field[1][:-1])
         if(curkey=='author'):
           curdict[curkey] = authors_str2list(curval)
           #print(authors_str2list(curval)); stop
@@ -167,3 +167,7 @@ def bibitem_print(item, n):
   
   string = string+'.'
   return(string)
+
+def latex2html(stri):
+  stri = re.sub(r"\{\\\'\{e\}\}", '&eacute', stri) # {\'{e}}
+  return(stri)
